@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Contractor {
+  id                String   @id @default(cuid())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  businessName      String
+  contactName       String
+  email             String   @unique
+  phone             String
+  trade             String   // plumbing, hvac, roofing, general, etc.
+
+  serviceArea       String?  // cities or zip codes, comma-separated
+  businessHours     String?  // JSON: { mon: "8-17", ... }
+  greeting          String?
+
+  vapiAssistantId   String?
+  vapiPhoneNumberId String?
+  phoneNumber       String?  // E.164 displayed to callers
+
+  calcomApiKey      String?
+  calcomEventTypeId Int?
+  calcomUsername    String?
+
+  trialStartedAt    DateTime @default(now())
+  trialEndsAt       DateTime
+  status            String   @default("trial") // trial, active, cancelled
+
+  leads             Lead[]
+  calls             Call[]
+}
+
+model Lead {
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+
+  contractorId String
+  contractor   Contractor @relation(fields: [contractorId], references: [id], onDelete: Cascade)
+
+  callerName   String?
+  callerPhone  String?
+  address      String?
+  serviceType  String?
+  urgency      String?  // routine, soon, emergency
+  notes        String?
+  status       String   @default("new") // new, booked, lost, contacted
+
+  appointmentAt DateTime?
+  callId       String?  @unique
+  call         Call?    @relation(fields: [callId], references: [id])
+}
+
+model Call {
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+
+  contractorId String
+  contractor   Contractor @relation(fields: [contractorId], references: [id], onDelete: Cascade)
+
+  vapiCallId   String?  @unique
+  direction    String   @default("inbound")
+  durationSec  Int?
+  transcript   String?
+  summary      String?
+  endedReason  String?
+
+  lead         Lead?
+}
