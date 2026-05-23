@@ -166,7 +166,7 @@ export default async function DashboardPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {c.leads.map((l) => (
+                  {c.leads.map((l: (typeof c.leads)[number]) => (
                     <tr key={l.id}>
                       <td>{l.createdAt.toLocaleString()}</td>
                       <td>{l.callerName ?? "—"}</td>

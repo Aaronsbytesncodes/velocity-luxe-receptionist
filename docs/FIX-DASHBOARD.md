@@ -12,10 +12,13 @@ Set as `DATABASE_URL` in Vercel → **Redeploy**.
 
 ```powershell
 cd velocity-luxe-receptionist
+npm install
 git add .
-git commit -m "Fix Vercel database: Prisma 6 + Neon serverless"
+git commit -m "Fix Vercel build: Prisma 6 lockfile + database"
 git push
 ```
+
+If build failed with `prisma generate && next build exited with 1`, it was usually **package-lock.json stuck on Prisma 7**. Run `npm install` locally before push so lockfile matches `package.json`.
 
 Vercel auto-deploys from GitHub.
 
