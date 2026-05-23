@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+
+export const runtime = "nodejs";
 import { addDays, format, parseISO, startOfDay } from "date-fns";
 import { prisma } from "@/lib/prisma";
 import { getAvailableSlots, formatSlotsForVoice } from "@/lib/calcom";

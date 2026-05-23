@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+
+export const runtime = "nodejs";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { trialEndDate } from "@/lib/trial";
